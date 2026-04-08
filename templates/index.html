@@ -4,46 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Управление стереокамерой</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Стереокамера с поворотом</h1>
-        <div class="video-box">
-            <img src="{{ url_for('video_feed') }}" alt="Video Stream">
+        <h1>Управление панорамой и наклоном</h1>
+        <div class="video">
+            <img src="/video_feed" alt="Video Stream">
         </div>
         <div class="controls">
-            <div class="control">
-                <label>Панорама: <span id="panValue">{{ pan }}</span>°</label>
-                <input type="range" id="panSlider" min="30" max="150" value="{{ pan }}">
+            <div>
+                <label>Панорама: <span id="panVal">{{ pan }}</span>°</label>
+                <input type="range" id="pan" min="30" max="150" value="{{ pan }}">
             </div>
-            <div class="control">
-                <label>Наклон: <span id="tiltValue">{{ tilt }}</span>°</label>
-                <input type="range" id="tiltSlider" min="30" max="150" value="{{ tilt }}">
+            <div>
+                <label>Наклон: <span id="tiltVal">{{ tilt }}</span>°</label>
+                <input type="range" id="tilt" min="30" max="150" value="{{ tilt }}">
             </div>
         </div>
     </div>
     <script>
-        const panSlider = document.getElementById('panSlider');
-        const tiltSlider = document.getElementById('tiltSlider');
-        const panValue = document.getElementById('panValue');
-        const tiltValue = document.getElementById('tiltValue');
+        const panSlider = document.getElementById('pan');
+        const tiltSlider = document.getElementById('tilt');
+        const panVal = document.getElementById('panVal');
+        const tiltVal = document.getElementById('tiltVal');
 
-        function sendMove(axis, angle) {
-            fetch(`/move/${axis}/${angle}`, { method: 'GET' })
-                .catch(err => console.error('Ошибка:', err));
+        async function send(url) {
+            try {
+                await fetch(url);
+            } catch(e) { console.error(e); }
         }
 
-        panSlider.oninput = function() {
-            let val = this.value;
-            panValue.innerText = val;
-            sendMove('pan', val);
+        panSlider.oninput = () => {
+            let v = panSlider.value;
+            panVal.innerText = v;
+            send('/pan/' + v);
         };
-
-        tiltSlider.oninput = function() {
-            let val = this.value;
-            tiltValue.innerText = val;
-            sendMove('tilt', val);
+        tiltSlider.oninput = () => {
+            let v = tiltSlider.value;
+            tiltVal.innerText = v;
+            send('/tilt/' + v);
         };
     </script>
 </body>
