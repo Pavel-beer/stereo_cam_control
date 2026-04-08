@@ -1,58 +1,60 @@
 #!/usr/bin/env python3
 # app.py
-import time
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, request, Response
 from camera import StereoCamera
-from servos import set_servo_angle, cleanup_gpio
-import atexit
+from servo import set_angle
+import RPi.GPIO as GPIO
 
 app = Flask(__name__)
 
-# Пины для сервоприводов (BCM)
-PAN_PIN = 27
-TILT_PIN = 17
+# Пины сервоприводов (BCM)
+PIN_PAN = 27    # панорама
+PIN_TILT = 17   # наклон
 
 # Начальные углы
 pan_angle = 90
 tilt_angle = 90
 
-# Инициализация камеры (индексы устройств могут отличаться)
-# Обычно первая камера /dev/video0, вторая /dev/video2
-# Но у вас стереокамера может давать video0 и video1 – проверьте
-camera = StereoCamera(left_id=0, right_id=1, width=320, height=240, horizontal=True)
+# Настройка GPIO (один раз при старте)
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+# Инициализация камеры (выберите разрешение под свою камеру)
+# Варианты: (1280,480) - 15fps, (2560,720) - 5fps, (640,352) - 30fps
+camera = StereoCamera(device_id=0, width=1280, height=480)
 
 @app.route('/')
 def index():
     return render_template('index.html', pan=pan_angle, tilt=tilt_angle)
 
-def generate_frames():
-    """Генератор кадров для видеопотока"""
+def gen():
+    camera.start()
     while True:
         frame = camera.get_frame()
         if frame:
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         else:
+            import time
             time.sleep(0.05)
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(generate_frames(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/move/<axis>/<int:angle>')
-def move(axis, angle):
-    global pan_angle, tilt_angle
-    if axis == 'pan':
-        pan_angle = angle
-        set_servo_angle(PAN_PIN, angle)
-    elif axis == 'tilt':
-        tilt_angle = angle
-        set_servo_angle(TILT_PIN, angle)
-    return '', 204  # успешно, без содержимого
+@app.route('/pan/<int:angle>')
+def set_pan(angle):
+    global pan_angle
+    pan_angle = max(30, min(150, angle))
+    set_angle(PIN_PAN, pan_angle)
+    return '', 204
 
-# При завершении очищаем GPIO
-atexit.register(cleanup_gpio)
+@app.route('/tilt/<int:angle>')
+def set_tilt(angle):
+    global tilt_angle
+    tilt_angle = max(30, min(150, angle))
+    set_angle(PIN_TILT, tilt_angle)
+    return '', 204
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=False, threaded=True)
