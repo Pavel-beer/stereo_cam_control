@@ -1,0 +1,225 @@
+:root {
+    --bg-dark: #0f0f0f;
+    --card-bg: #1e1e1e;
+    --accent: #00d4ff;
+    --accent-glow: rgba(0, 212, 255, 0.4);
+    --text: #e0e0e0;
+    --text-muted: #888;
+    --danger: #ff4d4d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Заголовок */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--accent), #a0a0ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Сетка */
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Видеокарточка */
+.video-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    border: 1px solid #2c2c2c;
+}
+
+.video-container {
+    position: relative;
+    background: #000;
+}
+
+.video-container img {
+    width: 100%;
+    display: block;
+}
+
+.fps-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0,0,0,0.7);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #0f0;
+    backdrop-filter: blur(4px);
+}
+
+/* Панель управления */
+.control-panel {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid #2c2c2c;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 5px;
+    -webkit-appearance: none;
+    background: #333;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 5px var(--accent);
+}
+
+.angle-value {
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* Кнопки быстрого позиционирования */
+.quick-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    background: #2c2c2c;
+    border: none;
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background: #00b8e6;
+    transform: scale(1.02);
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #ff1a1a;
+}
+
+/* Секция настроек */
+.settings-section {
+    border-top: 1px solid #2c2c2c;
+    padding-top: 15px;
+    margin-top: 10px;
+}
+
+.settings-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: var(--accent);
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+select, button {
+    background: #2c2c2c;
+    border: 1px solid #444;
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+select:focus, button:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #0f0;
+    margin-right: 6px;
+    box-shadow: 0 0 4px #0f0;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; transform: scale(0.8);}
+    100% { opacity: 1; transform: scale(1.2);}
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
