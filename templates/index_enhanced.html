@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Стереокамера с управлением (улучшенная)</title>
+    <link rel="stylesheet" href="/static/style_enhanced.css">
+</head>
+<body>
+<div class="container">
+    <h1>🎥 Стереокамера с поворотом</h1>
+    <div class="grid">
+        <div class="video-card">
+            <div class="video-container">
+                <img id="video" src="/video_feed" alt="Video Stream">
+                <div class="fps-overlay">📊 FPS: <span id="fps">0</span></div>
+            </div>
+        </div>
+        <div class="control-panel">
+            <div class="control-group">
+                <label>🔄 Панорама: <span id="panVal" class="angle-value">90</span>°</label>
+                <input type="range" id="pan" min="30" max="150" step="1" value="90">
+            </div>
+            <div class="control-group">
+                <label>⬆️ Наклон: <span id="tiltVal" class="angle-value">90</span>°</label>
+                <input type="range" id="tilt" min="30" max="150" step="1" value="90">
+            </div>
+            <div class="quick-buttons">
+                <button id="homeBtn" class="btn btn-primary">🏠 Домой (90°)</button>
+                <button id="snapshotBtn" class="btn">📸 Снимок</button>
+            </div>
+            <div class="settings-section">
+                <h3>⚙️ Настройки камеры</h3>
+                <div class="row">
+                    <label>Режим отображения:</label>
+                    <select id="viewMode">
+                        <option value="stereo">👓 Стерео (оба глаза)</option>
+                        <option value="left">👁️ Левый глаз</option>
+                        <option value="right">👁️ Правый глаз</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <label>Разрешение:</label>
+                    <select id="resolution">
+                        <option value="640x352">640x352 (30 fps)</option>
+                        <option value="1280x480">1280x480 (15 fps)</option>
+                        <option value="2560x720">2560x720 (5 fps)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>📡 Статус</h3>
+                <div><span class="status-indicator"></span> Сервер активен</div>
+                <div>🎛️ Текущий FPS: <strong id="fpsStatus">--</strong></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        Улучшенный интерфейс | Raspberry Pi + USB Stereo Camera
+    </footer>
+</div>
+<script src="/static/script_enhanced.js"></script>
+</body>
+</html>
