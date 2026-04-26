@@ -1,0 +1,17 @@
+[Unit]
+Description=Stereoscopic Camera Control Service
+After=network.target multi-user.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/stereo_cam_control
+ExecStart=/usr/bin/python3 /home/ubuntu/stereo_cam_control/app_enhanced.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
